@@ -86,3 +86,11 @@ if __name__ == "__main__":
     plt.title(f"label = {label}")
     plt.axis("off")
     plt.show()
+
+    x = image.flatten()
+
+    print(x.shape)
+
+    print(image)
+    print()
+    print(image.flatten())
