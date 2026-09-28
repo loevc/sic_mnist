@@ -52,6 +52,13 @@ def load_labels(path):
     return labels
 
 
+def read_data_sets():
+    X_train = load_images("../../dataset/raw/train-images-idx3-ubyte.gz")
+    y_train = load_labels("../../dataset/raw/train-labels-idx1-ubyte.gz")
+    X_test = load_images("../../dataset/raw/t10k-images-idx3-ubyte.gz")
+    y_test = load_labels("../../dataset/raw/t10k-labels-idx1-ubyte.gz")
+    return X_train, y_train, X_test, y_test
+
 if __name__ == "__main__":
 
     images = load_images(
