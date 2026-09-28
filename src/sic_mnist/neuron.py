@@ -1,20 +1,27 @@
 import numpy as np
 
 
-# 3 个输入
-x = np.array([2.0, 3.0, 4.0])
+# 模拟一张 MNIST 图片
+x = np.random.rand(784)
 
-# 3 个权重
-w = np.array([0.1, 0.2, 0.3])
+# 10 个输出神经元
+W = np.random.randn(10, 784)
 
-# bias
-b = 0.5
+# 10 个 bias
+b = np.random.randn(10)
 
 
-# 神经元计算
-y = np.dot(w, x) + b
+y = W @ x + b
 
-print("x =", x)
-print("w =", w)
-print("b =", b)
+
+print("x.shape =", x.shape)
+print("W.shape =", W.shape)
+print("b.shape =", b.shape)
+print("y.shape =", y.shape)
+
+print()
 print("y =", y)
+# print("x =", x)
+# print("W =", W)
+# print("b =", b)
+
