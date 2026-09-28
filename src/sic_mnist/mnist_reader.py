@@ -67,3 +67,22 @@ if __name__ == "__main__":
     print("images.shape =", images.shape)
     #
     print("labels.shape =", labels.shape)
+
+    image = images[0]
+    label = labels[0]
+
+    print("image.shape =", image.shape)
+    print("label =", label)
+
+    print("min =", image.min())
+    print("max =", image.max())
+
+    # help(np.frombuffer)
+    # print(np.frombuffer.__doc__)
+
+    import matplotlib.pyplot as plt
+
+    plt.imshow(image, cmap="gray")
+    plt.title(f"label = {label}")
+    plt.axis("off")
+    plt.show()
