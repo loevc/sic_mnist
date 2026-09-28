@@ -1,0 +1,8 @@
+uv add numpy matplotlib
+
+uv run python
+
+uv run python .\src\sic_mnist\00_dependency.py
+
+uv sync
+uv lock
