@@ -56,7 +56,7 @@ batch_size = 32
 learning_rate = 0.1
 # learning_rate = 0.01
 
-epochs = 100
+epochs = 5
 
 X_train, y_train, X_test, y_test = mnist_reader.read_data_sets_reshape()
 
@@ -289,4 +289,54 @@ for i in range(16):
     plt.axis("off")
 
 plt.tight_layout()
+plt.show()
+
+
+def confusion_matrix(
+    y_true,
+    y_pred,
+    num_classes=10
+):
+
+    matrix = np.zeros(
+        (num_classes, num_classes),
+        dtype=int
+    )
+
+    for true, pred in zip(
+        y_true,
+        y_pred
+    ):
+
+        matrix[true, pred] += 1
+
+    return matrix
+
+
+
+cm = confusion_matrix(
+    y_test,
+    predictions
+)
+
+print(cm)
+
+
+
+plt.figure(figsize=(8, 8))
+
+plt.imshow(cm)
+
+plt.colorbar()
+
+plt.xlabel("Predicted")
+
+plt.ylabel("True")
+
+plt.title("Confusion Matrix")
+
+plt.xticks(range(10))
+
+plt.yticks(range(10))
+
 plt.show()
