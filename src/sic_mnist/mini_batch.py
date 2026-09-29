@@ -162,3 +162,26 @@ for epoch in range(epochs):
     )
 
 print(f"cost: {time.perf_counter() - start_time:.4f} s")
+
+
+def predict(X):
+
+    Z1 = X @ W1.T + b1
+    H = relu(Z1)
+
+    Z2 = H @ W2.T + b2
+
+    P = softmax(Z2)
+
+    return np.argmax(P, axis=1)
+
+
+predictions = predict(X_test)
+
+accuracy = np.mean(
+    predictions == y_test
+)
+
+print(
+    f"test accuracy: {accuracy:.4f}"
+)
