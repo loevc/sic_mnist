@@ -199,3 +199,31 @@ plt.ylabel("Loss")
 plt.title("Training Loss")
 
 plt.show()
+
+
+def accuracy(X, y):
+
+    predictions = predict(X)
+
+    return np.mean(
+        predictions == y
+    )
+
+
+train_accuracy = accuracy(
+    X_train,
+    y_train
+)
+
+test_accuracy = accuracy(
+    X_test,
+    y_test
+)
+
+print(
+    f"train accuracy: {train_accuracy:.4f}"
+)
+
+print(
+    f"test accuracy: {test_accuracy:.4f}"
+)
