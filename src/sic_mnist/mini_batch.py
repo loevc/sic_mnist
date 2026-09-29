@@ -74,6 +74,7 @@ num_samples = len(X_train)
 
 start_time = time.perf_counter()
 
+loss_history = []
 
 for epoch in range(epochs):
 
@@ -155,6 +156,8 @@ for epoch in range(epochs):
 
     epoch_loss /= num_samples
 
+    loss_history.append(epoch_loss)
+
     print(
         f"epoch={epoch + 1}, "
         f"loss={epoch_loss:.4f}, "
@@ -185,3 +188,14 @@ accuracy = np.mean(
 print(
     f"test accuracy: {accuracy:.4f}"
 )
+
+
+import matplotlib.pyplot as plt
+
+plt.plot(loss_history)
+
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.title("Training Loss")
+
+plt.show()
