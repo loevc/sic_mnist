@@ -227,3 +227,66 @@ print(
 print(
     f"test accuracy: {test_accuracy:.4f}"
 )
+
+predictions = predict(X_test)
+
+wrong_indices = np.where(
+    predictions != y_test
+)[0]
+
+print(
+    "wrong samples:",
+    len(wrong_indices)
+)
+
+index = wrong_indices[0]
+
+image = X_test[index]
+
+true_label = y_test[index]
+
+predicted_label = predictions[index]
+
+
+plt.imshow(
+    image.reshape(28, 28),
+    cmap="gray"
+)
+
+plt.title(
+    f"True: {true_label}, "
+    f"Predicted: {predicted_label}"
+)
+
+plt.axis("off")
+
+plt.show()
+
+
+plt.figure(figsize=(8, 8))
+
+for i in range(16):
+
+    index = wrong_indices[i]
+
+    image = X_test[index]
+
+    true_label = y_test[index]
+
+    predicted_label = predictions[index]
+
+    plt.subplot(4, 4, i + 1)
+
+    plt.imshow(
+        image.reshape(28, 28),
+        cmap="gray"
+    )
+
+    plt.title(
+        f"T:{true_label} P:{predicted_label}"
+    )
+
+    plt.axis("off")
+
+plt.tight_layout()
+plt.show()
