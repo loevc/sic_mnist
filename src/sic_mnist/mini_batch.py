@@ -56,6 +56,12 @@ epochs = 10
 
 X_train, y_train, X_test, y_test = mnist_reader.read_data_sets_reshape()
 
+print("X_train dtype:", X_train.dtype)
+print("X_train min:", X_train.min())
+print("X_train max:", X_train.max())
+print("X_train mean:", X_train.mean())
+print("X_train std:", X_train.std())
+
 num_samples = len(X_train)
 
 for epoch in range(epochs):
