@@ -1,5 +1,7 @@
 import numpy as np
 import mnist_reader
+import time
+
 
 
 def softmax(z):
@@ -39,20 +41,22 @@ def relu(x):
     return np.maximum(0, x)
 
 
+
 input_size = 784
 hidden_size = 128
 output_size = 10
 
-W1 = np.random.randn(hidden_size, input_size) * 0.01
+W1 = np.random.randn(hidden_size, input_size) * np.sqrt(2.0 / input_size)
 b1 = np.zeros(hidden_size)
 
-W2 = np.random.randn(output_size, hidden_size) * 0.01
+W2 = np.random.randn(output_size, hidden_size) * np.sqrt(2.0 / input_size)
 b2 = np.zeros(output_size)
 
 batch_size = 32
 learning_rate = 0.1
+# learning_rate = 0.01
 
-epochs = 10
+epochs = 100
 
 X_train, y_train, X_test, y_test = mnist_reader.read_data_sets_reshape()
 
@@ -62,7 +66,14 @@ print("X_train max:", X_train.max())
 print("X_train mean:", X_train.mean())
 print("X_train std:", X_train.std())
 
+X_train = X_train.astype(np.float32) / 255.0
+X_test = X_test.astype(np.float32) / 255.0
+
 num_samples = len(X_train)
+
+
+start_time = time.perf_counter()
+
 
 for epoch in range(epochs):
 
@@ -146,5 +157,8 @@ for epoch in range(epochs):
 
     print(
         f"epoch={epoch + 1}, "
-        f"loss={epoch_loss:.4f}"
+        f"loss={epoch_loss:.4f}, "
+        f"p={np.exp(-epoch_loss):.4f}"
     )
+
+print(f"cost: {time.perf_counter() - start_time:.4f} s")
