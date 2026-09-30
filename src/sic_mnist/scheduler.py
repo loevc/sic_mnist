@@ -41,34 +41,34 @@ class WarmupCosineScheduler:
         for param_group in self.optimizer.param_groups:
             param_group["lr"] = lr
 
-import torch
-import torch.nn as nn
-
-
-model = nn.Sequential(
-    nn.Linear(784, 128),
-    nn.ReLU(),
-    nn.Linear(128, 10)
-)
-
-optimizer = torch.optim.SGD(
-    model.parameters(),
-    lr=0.0
-)
-
-scheduler = WarmupCosineScheduler(
-    optimizer=optimizer,
-    warmup_epochs=5,
-    total_epochs=20,
-    max_lr=0.1,
-    min_lr=0.001
-)
-
-for epoch in range(20):
-
-    scheduler.step(epoch)
-
-    print(
-        epoch + 1,
-        optimizer.param_groups[0]["lr"]
-    )
+# import torch
+# import torch.nn as nn
+#
+#
+# model = nn.Sequential(
+#     nn.Linear(784, 128),
+#     nn.ReLU(),
+#     nn.Linear(128, 10)
+# )
+#
+# optimizer = torch.optim.SGD(
+#     model.parameters(),
+#     lr=0.0
+# )
+#
+# scheduler = WarmupCosineScheduler(
+#     optimizer=optimizer,
+#     warmup_epochs=5,
+#     total_epochs=20,
+#     max_lr=0.1,
+#     min_lr=0.001
+# )
+#
+# for epoch in range(20):
+#
+#     scheduler.step(epoch)
+#
+#     print(
+#         epoch + 1,
+#         optimizer.param_groups[0]["lr"]
+#     )

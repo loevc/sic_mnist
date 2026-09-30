@@ -23,6 +23,8 @@ parser.add_argument("--lr", type=float, required=False, default=DEFAULT_LR, help
 args = parser.parse_args()
 LR = args.lr
 
+BATCH_SIZE = 64
+
 # ============================================================
 # 1. Device
 # ============================================================
@@ -87,14 +89,14 @@ test_dataset = TensorDataset(
 
 train_loader = DataLoader(
     train_dataset,
-    batch_size=32,
+    batch_size=BATCH_SIZE,
     # 每个 epoch 都把训练数据重新打乱
     shuffle=True
 )
 
 test_loader = DataLoader(
     test_dataset,
-    batch_size=32,
+    batch_size=BATCH_SIZE,
     shuffle=False
 )
 
@@ -270,6 +272,7 @@ for epoch in range(epochs):
 
     log.info(
         f"epoch={epoch + 1}, "
+        f"steps={len(train_loader)}, "
         f"loss={train_loss:.4f}, "
         f"train_acc={train_acc:.4f}, "
         f"test_acc={test_acc:.4f}, "
