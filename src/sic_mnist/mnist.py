@@ -10,6 +10,8 @@ import argparse
 from logger import log
 log.set_level(log.INFO)
 
+import scheduler as scheduler_factory
+
 
 # ============================================================
 # 0. Args
@@ -127,26 +129,13 @@ optimizer = torch.optim.SGD(
     # momentum=0.9
 )
 
-scheduler = torch.optim.lr_scheduler.StepLR(
+scheduler = scheduler_factory.WarmupCosineScheduler(
     optimizer,
-    step_size=2,
-    gamma=0.1
+    warmup_epochs=2,
+    total_epochs=10,
+    max_lr=0.1,
+    min_lr=0.001
 )
-
-# scheduler = torch.optim.lr_scheduler.ExponentialLR(
-#     optimizer,
-#     gamma=0.95
-# )
-
-# scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-#     optimizer,
-#     T_max=10
-# )
-
-# optimizer = torch.optim.Adam(
-#     model.parameters(),
-#     lr=0.001
-# )
 
 # ============================================================
 # 8. Training
@@ -157,6 +146,8 @@ epochs = 10
 start_time = time.time()
 
 for epoch in range(epochs):
+
+    scheduler.step(epoch)
 
     # --------------------------------------------
     # Training mode
@@ -242,7 +233,7 @@ for epoch in range(epochs):
     train_loss = total_loss / total
     train_acc = correct / total
 
-    scheduler.step()
+    # scheduler.step()
 
 
     # --------------------------------------------
