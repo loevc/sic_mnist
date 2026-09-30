@@ -6,6 +6,8 @@ from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 import torch.nn as nn
 
+from logger import log
+log.set_level(log.INFO)
 
 # ============================================================
 # 1. Device
@@ -17,10 +19,10 @@ device = torch.device(
     else "cpu"
 )
 
-print("device:", device)
+log.info("device:", device)
 
 if torch.cuda.is_available():
-    print("GPU:", torch.cuda.get_device_name(0))
+    log.debug("GPU:", torch.cuda.get_device_name(0))
 
 # ============================================================
 # 2. NumPy -> Tensor
@@ -93,9 +95,9 @@ model = nn.Sequential(
 ).to(device)
 
 for name, param in model.named_parameters():
-    print(name)
-    print("shape:", param.shape)
-    print("requires_grad:", param.requires_grad)
+    log.debug(name)
+    log.debug("shape:", param.shape)
+    log.debug("requires_grad:", param.requires_grad)
 
 # ============================================================
 # 6. Loss
@@ -162,14 +164,14 @@ for epoch in range(epochs):
 
         # view model
         for name, param in model.named_parameters():
-            print(name, param.grad)
+            log.debug(name, param.grad)
 
         # backward
         loss.backward()
 
         # view model
         for name, param in model.named_parameters():
-            print(
+            log.debug(
                 name,
                 param.grad.shape,
                 "gradient mean =",
@@ -181,7 +183,7 @@ for epoch in range(epochs):
 
         new_weight = model[0].weight
 
-        print(
+        log.debug(
             "weight changed:",
             not torch.equal(
                 old_weight,
@@ -245,7 +247,7 @@ for epoch in range(epochs):
     test_acc = test_correct / test_total
 
 
-    print(
+    log.info(
         f"epoch={epoch + 1}, "
         f"loss={train_loss:.4f}, "
         f"train_acc={train_acc:.4f}, "
@@ -255,6 +257,6 @@ for epoch in range(epochs):
 
 elapsed = time.time() - start_time
 
-print(f"cost: {elapsed:.4f} s")
+log.info(f"cost: {elapsed:.4f} s")
 
 # 2.30 ≈ ln(10)
