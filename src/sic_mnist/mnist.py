@@ -16,7 +16,7 @@ log.set_level(log.INFO)
 # ============================================================
 
 parser = argparse.ArgumentParser()
-DEFAULT_LR = 0.369
+DEFAULT_LR = 0.1
 parser.add_argument("--lr", type=float, required=False, default=DEFAULT_LR, help="learning rate for SGD")
 args = parser.parse_args()
 LR = args.lr
@@ -127,6 +127,22 @@ optimizer = torch.optim.SGD(
     # momentum=0.9
 )
 
+scheduler = torch.optim.lr_scheduler.StepLR(
+    optimizer,
+    step_size=2,
+    gamma=0.1
+)
+
+# scheduler = torch.optim.lr_scheduler.ExponentialLR(
+#     optimizer,
+#     gamma=0.95
+# )
+
+# scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+#     optimizer,
+#     T_max=10
+# )
+
 # optimizer = torch.optim.Adam(
 #     model.parameters(),
 #     lr=0.001
@@ -136,7 +152,7 @@ optimizer = torch.optim.SGD(
 # 8. Training
 # ============================================================
 
-epochs = 5
+epochs = 10
 
 start_time = time.time()
 
@@ -226,6 +242,8 @@ for epoch in range(epochs):
     train_loss = total_loss / total
     train_acc = correct / total
 
+    scheduler.step()
+
 
     # --------------------------------------------
     # Evaluation
@@ -263,7 +281,8 @@ for epoch in range(epochs):
         f"epoch={epoch + 1}, "
         f"loss={train_loss:.4f}, "
         f"train_acc={train_acc:.4f}, "
-        f"test_acc={test_acc:.4f}"
+        f"test_acc={test_acc:.4f}, "
+        f"lr={optimizer.param_groups[0]['lr']}"
     )
 
 
