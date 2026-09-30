@@ -10,8 +10,6 @@ import argparse
 from logger import log
 log.set_level(log.INFO)
 
-import scheduler as scheduler_factory
-
 
 # ============================================================
 # 0. Args
@@ -23,7 +21,8 @@ parser.add_argument("--lr", type=float, required=False, default=DEFAULT_LR, help
 args = parser.parse_args()
 LR = args.lr
 
-BATCH_SIZE = 64
+BATCH_SIZE = 16
+accumulation_steps = 4
 
 # ============================================================
 # 1. Device
@@ -131,12 +130,10 @@ optimizer = torch.optim.SGD(
     # momentum=0.9
 )
 
-scheduler = scheduler_factory.WarmupCosineScheduler(
+scheduler = torch.optim.lr_scheduler.StepLR(
     optimizer,
-    warmup_epochs=2,
-    total_epochs=10,
-    max_lr=0.1,
-    min_lr=0.001
+    step_size=2,
+    gamma=0.1
 )
 
 # ============================================================
@@ -149,7 +146,7 @@ start_time = time.time()
 
 for epoch in range(epochs):
 
-    scheduler.step(epoch)
+    # scheduler.step(epoch)
 
     # --------------------------------------------
     # Training mode
@@ -162,7 +159,9 @@ for epoch in range(epochs):
     correct = 0
     total = 0
 
-    for images, labels in train_loader:
+    optimizer.zero_grad()
+
+    for step, (images, labels) in enumerate(train_loader):
 
         # 参与同一次计算的 Tensor 和模型参数必须在同一个 device 上
         # tensor : data,  模型参数： model
@@ -172,7 +171,7 @@ for epoch in range(epochs):
         old_weight = model[0].weight.clone()
 
         # 清空上一批次的 gradient, pytorch模型梯度累加
-        optimizer.zero_grad()
+        # optimizer.zero_grad()
 
         # forward
         logits = model(images)
@@ -182,6 +181,8 @@ for epoch in range(epochs):
             logits,
             labels
         )
+
+        loss = loss/accumulation_steps
 
         # view model
         for name, param in model.named_parameters():
@@ -199,8 +200,18 @@ for epoch in range(epochs):
                 param.grad.mean().item()
             )
 
+        torch.nn.utils.clip_grad_norm_(
+            model.parameters(),
+            max_norm=1.0
+        )
+
+
         # update parameters
-        optimizer.step()
+        # optimizer.step()
+
+        if (step + 1) % accumulation_steps == 0:
+            optimizer.step()
+            optimizer.zero_grad()
 
         new_weight = model[0].weight
 
@@ -235,7 +246,7 @@ for epoch in range(epochs):
     train_loss = total_loss / total
     train_acc = correct / total
 
-    # scheduler.step()
+    scheduler.step()
 
 
     # --------------------------------------------
