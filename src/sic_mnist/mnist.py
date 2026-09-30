@@ -162,8 +162,6 @@ for epoch in range(epochs):
         images = images.to(device)
         labels = labels.to(device)
 
-        old_weight = model[0].weight.clone()
-
         # 清空上一批次的 gradient, pytorch模型梯度累加
         # optimizer.zero_grad()
 
@@ -182,19 +180,21 @@ for epoch in range(epochs):
         # backward
         loss.backward()
 
-        torch.nn.utils.clip_grad_norm_(
-            model.parameters(),
-            max_norm=1.0
-        )
 
         # update parameters
         # optimizer.step()
 
-        if (step + 1) % accumulation_steps == 0:
+        if (
+                (step + 1) % accumulation_steps == 0
+                or (step + 1) == len(train_loader)
+        ):
+            torch.nn.utils.clip_grad_norm_(
+                model.parameters(),
+                max_norm=1.0
+            )
+
             optimizer.step()
             optimizer.zero_grad()
-
-        new_weight = model[0].weight
 
 
         # ----------------------------------------
