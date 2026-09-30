@@ -5,9 +5,21 @@ import mnist_reader
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 import torch.nn as nn
+import argparse
 
 from logger import log
 log.set_level(log.INFO)
+
+
+# ============================================================
+# 0. Args
+# ============================================================
+
+parser = argparse.ArgumentParser()
+DEFAULT_LR = 0.369
+parser.add_argument("--lr", type=float, required=False, default=DEFAULT_LR, help="learning rate for SGD")
+args = parser.parse_args()
+LR = args.lr
 
 # ============================================================
 # 1. Device
@@ -111,7 +123,7 @@ criterion = nn.CrossEntropyLoss()
 
 optimizer = torch.optim.SGD(
     model.parameters(),
-    lr=0.1,
+    lr=LR,
     # momentum=0.9
 )
 
