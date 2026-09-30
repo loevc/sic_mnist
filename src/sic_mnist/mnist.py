@@ -92,6 +92,11 @@ model = nn.Sequential(
     nn.Linear(128, 10)
 ).to(device)
 
+for name, param in model.named_parameters():
+    print(name)
+    print("shape:", param.shape)
+    print("requires_grad:", param.requires_grad)
+
 # ============================================================
 # 6. Loss
 # ============================================================
@@ -147,8 +152,21 @@ for epoch in range(epochs):
             labels
         )
 
+        # view model
+        for name, param in model.named_parameters():
+            print(name, param.grad)
+
         # backward
         loss.backward()
+
+        # view model
+        for name, param in model.named_parameters():
+            print(
+                name,
+                param.grad.shape,
+                "gradient mean =",
+                param.grad.mean().item()
+            )
 
         # update parameters
         optimizer.step()
