@@ -36,8 +36,6 @@ device = torch.device(
 
 log.info("device:", device)
 
-if torch.cuda.is_available():
-    log.debug("GPU:", torch.cuda.get_device_name(0))
 
 # ============================================================
 # 2. NumPy -> Tensor
@@ -109,10 +107,6 @@ model = nn.Sequential(
     nn.Linear(128, 10)
 ).to(device)
 
-for name, param in model.named_parameters():
-    log.debug(name)
-    log.debug("shape:", param.shape)
-    log.debug("requires_grad:", param.requires_grad)
 
 # ============================================================
 # 6. Loss
@@ -184,27 +178,14 @@ for epoch in range(epochs):
 
         loss = loss/accumulation_steps
 
-        # view model
-        for name, param in model.named_parameters():
-            log.debug(name, param.grad)
 
         # backward
         loss.backward()
-
-        # view model
-        for name, param in model.named_parameters():
-            log.debug(
-                name,
-                param.grad.shape,
-                "gradient mean =",
-                param.grad.mean().item()
-            )
 
         torch.nn.utils.clip_grad_norm_(
             model.parameters(),
             max_norm=1.0
         )
-
 
         # update parameters
         # optimizer.step()
@@ -215,13 +196,6 @@ for epoch in range(epochs):
 
         new_weight = model[0].weight
 
-        log.debug(
-            "weight changed:",
-            not torch.equal(
-                old_weight,
-                new_weight
-            )
-        )
 
         # ----------------------------------------
         # statistics

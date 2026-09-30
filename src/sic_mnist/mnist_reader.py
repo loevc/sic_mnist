@@ -15,10 +15,6 @@ def load_images(path):
             f.read(16)
         )
 
-        log.debug("magic:", magic)
-        log.debug("num_images:", num_images)
-        log.debug("rows:", rows)
-        log.debug("cols:", cols)
 
         data = f.read()
 
@@ -40,9 +36,6 @@ def load_labels(path):
             ">II",
             f.read(8)
         )
-
-        log.debug("magic:", magic)
-        log.debug("num_labels:", num_labels)
 
         data = f.read()
 
@@ -81,24 +74,6 @@ def read_data_sets_reshape():
     X_train = X_train.astype(np.float32) / 255.0
     X_test = X_test.astype(np.float32) / 255.0
 
-    # %s 惰性求值， {} 非惰性
-    log.debug("X_train:")
-    log.debug("shape:", X_train.shape)
-    log.debug("dtype:", X_train.dtype)
-    log.debug("min:", X_train.min())
-    log.debug("max:", X_train.max())
-    log.debug("mean:", X_train.mean())
-    log.debug("std:", X_train.std())
-
-    log.debug()
-
-    log.debug("X_test:")
-    log.debug("shape:", X_test.shape)
-    log.debug("dtype:", X_test.dtype)
-    log.debug("min:", X_test.min())
-    log.debug("max:", X_test.max())
-    log.debug("mean:", X_test.mean())
-    log.debug("std:", X_test.std())
 
     # mean = X_train.mean()
     # std = X_train.std()
@@ -112,7 +87,6 @@ if __name__ == "__main__":
 
 
     X_train, y_train, X_test, y_test = read_data_sets_reshape()
-    log.debug(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
     # 我想在这个地方就停止或者返回，不继续执行了
     raise SystemExit
 
