@@ -57,6 +57,7 @@ learning_rate = 0.1
 # learning_rate = 0.01
 
 epochs = 5
+# epochs = 2
 
 X_train, y_train, X_test, y_test = mnist_reader.read_data_sets_reshape()
 
