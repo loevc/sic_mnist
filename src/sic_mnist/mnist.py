@@ -109,8 +109,14 @@ criterion = nn.CrossEntropyLoss()
 
 optimizer = torch.optim.SGD(
     model.parameters(),
-    lr=0.1
+    lr=0.1,
+    # momentum=0.9
 )
+
+# optimizer = torch.optim.Adam(
+#     model.parameters(),
+#     lr=0.001
+# )
 
 # ============================================================
 # 8. Training
