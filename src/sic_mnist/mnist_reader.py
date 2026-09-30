@@ -4,19 +4,21 @@ import os
 
 import numpy as np
 
+from logger import log
+log.set_level(log.INFO)
 
 def load_images(path):
-    print(os.path.abspath(path))
+    log.debug(os.path.abspath(path))
     with gzip.open(path, "rb") as f:
         magic, num_images, rows, cols = struct.unpack(
             ">IIII",
             f.read(16)
         )
 
-        print("magic:", magic)
-        print("num_images:", num_images)
-        print("rows:", rows)
-        print("cols:", cols)
+        log.debug("magic:", magic)
+        log.debug("num_images:", num_images)
+        log.debug("rows:", rows)
+        log.debug("cols:", cols)
 
         data = f.read()
 
@@ -32,15 +34,15 @@ def load_images(path):
 
 
 def load_labels(path):
-    print(os.path.abspath(path))
+    log.debug(os.path.abspath(path))
     with gzip.open(path, "rb") as f:
         magic, num_labels = struct.unpack(
             ">II",
             f.read(8)
         )
 
-        print("magic:", magic)
-        print("num_labels:", num_labels)
+        log.debug("magic:", magic)
+        log.debug("num_labels:", num_labels)
 
         data = f.read()
 
@@ -79,36 +81,38 @@ def read_data_sets_reshape():
     X_train = X_train.astype(np.float32) / 255.0
     X_test = X_test.astype(np.float32) / 255.0
 
-    print("X_train:")
-    print("shape:", X_train.shape)
-    print("dtype:", X_train.dtype)
-    print("min:", X_train.min())
-    print("max:", X_train.max())
-    print("mean:", X_train.mean())
-    print("std:", X_train.std())
+    # %s 惰性求值， {} 非惰性
+    log.debug("X_train:")
+    log.debug("shape:", X_train.shape)
+    log.debug("dtype:", X_train.dtype)
+    log.debug("min:", X_train.min())
+    log.debug("max:", X_train.max())
+    log.debug("mean:", X_train.mean())
+    log.debug("std:", X_train.std())
 
-    print()
+    log.debug()
 
-    print("X_test:")
-    print("shape:", X_test.shape)
-    print("dtype:", X_test.dtype)
-    print("min:", X_test.min())
-    print("max:", X_test.max())
-    print("mean:", X_test.mean())
-    print("std:", X_test.std())
+    log.debug("X_test:")
+    log.debug("shape:", X_test.shape)
+    log.debug("dtype:", X_test.dtype)
+    log.debug("min:", X_test.min())
+    log.debug("max:", X_test.max())
+    log.debug("mean:", X_test.mean())
+    log.debug("std:", X_test.std())
 
     # mean = X_train.mean()
     # std = X_train.std()
     #
     # X_train = (X_train / 255.0 - mean) / std
     # X_test = (X_test / 255.0 - mean) / std  # 用训练集的 mean/std
+    log.info("parse datasets finished")
     return X_train, y_train, X_test, y_test
 
 if __name__ == "__main__":
 
 
     X_train, y_train, X_test, y_test = read_data_sets_reshape()
-    print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
+    log.debug(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
     # 我想在这个地方就停止或者返回，不继续执行了
     raise SystemExit
 
@@ -120,23 +124,23 @@ if __name__ == "__main__":
         "../../dataset/raw/train-labels-idx1-ubyte.gz"
     )
 
-    print()
+    log.debug()
     # 这里是一个三维np数组
-    print("images.shape =", images.shape)
+    log.debug("images.shape =", images.shape)
     #
-    print("labels.shape =", labels.shape)
+    log.debug("labels.shape =", labels.shape)
 
     image = images[0]
     label = labels[0]
 
-    print("image.shape =", image.shape)
-    print("label =", label)
+    log.debug("image.shape =", image.shape)
+    log.debug("label =", label)
 
-    print("min =", image.min())
-    print("max =", image.max())
+    log.debug("min =", image.min())
+    log.debug("max =", image.max())
 
     # help(np.frombuffer)
-    # print(np.frombuffer.__doc__)
+    # log.debug(np.frombuffer.__doc__)
 
     import matplotlib.pyplot as plt
 
@@ -147,8 +151,8 @@ if __name__ == "__main__":
 
     x = image.flatten()
 
-    print(x.shape)
+    log.debug(x.shape)
 
-    print(image)
-    print()
-    print(image.flatten())
+    log.debug(image)
+    log.debug()
+    log.debug(image.flatten())
