@@ -140,6 +140,8 @@ for epoch in range(epochs):
         images = images.to(device)
         labels = labels.to(device)
 
+        old_weight = model[0].weight.clone()
+
         # 清空上一批次的 gradient, pytorch模型梯度累加
         optimizer.zero_grad()
 
@@ -170,6 +172,16 @@ for epoch in range(epochs):
 
         # update parameters
         optimizer.step()
+
+        new_weight = model[0].weight
+
+        print(
+            "weight changed:",
+            not torch.equal(
+                old_weight,
+                new_weight
+            )
+        )
 
         # ----------------------------------------
         # statistics
