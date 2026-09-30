@@ -74,6 +74,34 @@ def read_data_sets_reshape():
     y_train = load_labels(PATH_TRAIN_LABEL)
     X_test = load_images(PATH_TEST_IMG).reshape(-1, MNIST_FEATURE_DIM)
     y_test = load_labels(PATH_TEST_LABEL)
+
+    # 归一化到 [0, 1]，并转 float32
+    X_train = X_train.astype(np.float32) / 255.0
+    X_test = X_test.astype(np.float32) / 255.0
+
+    print("X_train:")
+    print("shape:", X_train.shape)
+    print("dtype:", X_train.dtype)
+    print("min:", X_train.min())
+    print("max:", X_train.max())
+    print("mean:", X_train.mean())
+    print("std:", X_train.std())
+
+    print()
+
+    print("X_test:")
+    print("shape:", X_test.shape)
+    print("dtype:", X_test.dtype)
+    print("min:", X_test.min())
+    print("max:", X_test.max())
+    print("mean:", X_test.mean())
+    print("std:", X_test.std())
+
+    # mean = X_train.mean()
+    # std = X_train.std()
+    #
+    # X_train = (X_train / 255.0 - mean) / std
+    # X_test = (X_test / 255.0 - mean) / std  # 用训练集的 mean/std
     return X_train, y_train, X_test, y_test
 
 if __name__ == "__main__":
